@@ -16,7 +16,7 @@
 
 #include "SDL_test_common.h"
 
-#if defined(__ANDROID__) && defined(__ARM_EABI__) && !defined(__ARM_ARCH_7A__)
+#if defined(__ANDROID__) && defined(__ARM_EABI__) && !defined(__ARM_ARCH_7A__) || defined(__MORPHOS__)
 
 int main(int argc, char *argv[])
 {
@@ -1118,7 +1118,7 @@ static SDL_bool render(void)
 
 int main(int argc, char *argv[])
 {
-    int fsaa, accel;
+    //int fsaa, accel;
     int done;
     SDL_DisplayMode mode;
     SDL_Event event;
@@ -1129,8 +1129,8 @@ int main(int argc, char *argv[])
     SDL_LogSetPriority(SDL_LOG_CATEGORY_APPLICATION, SDL_LOG_PRIORITY_INFO);
 
     /* Initialize parameters */
-    fsaa = 0;
-    accel = -1;
+    //fsaa = 0;
+    //accel = -1;
 
     /* Initialize test framework */
     state = SDLTest_CommonCreateState(argv, SDL_INIT_VIDEO);

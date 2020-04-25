@@ -74,6 +74,15 @@ static SDL_JoystickDriver *SDL_joystick_drivers[] = {
 #ifdef SDL_JOYSTICK_HIDAPI
     &SDL_HIDAPI_JoystickDriver,
 #endif
+#if defined(SDL_JOYSTICK_AMIGAINPUT)
+    &SDL_AMIGAINPUT_JoystickDriver,
+#endif
+#ifdef SDL_JOYSTICK_MORPHOS
+    &SDL_MORPHOS_JoystickDriver,
+#endif
+#ifdef SDL_JOYSTICK_AMIGA
+    &SDL_AMIGA_JoystickDriver,
+#endif
 #if defined(SDL_JOYSTICK_DUMMY) || defined(SDL_JOYSTICK_DISABLED)
     &SDL_DUMMY_JoystickDriver
 #endif
@@ -1701,29 +1710,29 @@ SDL_bool SDL_ShouldIgnoreJoystick(const char *name, SDL_JoystickGUID guid)
        https://raw.githubusercontent.com/denilsonsa/udev-joystick-blacklist/master/generate_rules.py
      */
     static Uint32 joystick_blacklist[] = {
-        /* Microsoft Microsoft Wireless Optical DesktopÂ® 2.10 */
+        /* Microsoft Microsoft Wireless Optical Desktop® 2.10 */
         /* Microsoft Wireless Desktop - Comfort Edition */
         MAKE_VIDPID(0x045e, 0x009d),
 
-        /* Microsoft MicrosoftÂ® Digital Media Pro Keyboard */
+        /* Microsoft Microsoft® Digital Media Pro Keyboard */
         /* Microsoft Corp. Digital Media Pro Keyboard */
         MAKE_VIDPID(0x045e, 0x00b0),
 
-        /* Microsoft MicrosoftÂ® Digital Media Keyboard */
+        /* Microsoft Microsoft® Digital Media Keyboard */
         /* Microsoft Corp. Digital Media Keyboard 1.0A */
         MAKE_VIDPID(0x045e, 0x00b4),
 
-        /* Microsoft MicrosoftÂ® Digital Media Keyboard 3000 */
+        /* Microsoft Microsoft® Digital Media Keyboard 3000 */
         MAKE_VIDPID(0x045e, 0x0730),
 
-        /* Microsoft MicrosoftÂ® 2.4GHz Transceiver v6.0 */
-        /* Microsoft MicrosoftÂ® 2.4GHz Transceiver v8.0 */
+        /* Microsoft Microsoft® 2.4GHz Transceiver v6.0 */
+        /* Microsoft Microsoft® 2.4GHz Transceiver v8.0 */
         /* Microsoft Corp. Nano Transceiver v1.0 for Bluetooth */
         /* Microsoft Wireless Mobile Mouse 1000 */
         /* Microsoft Wireless Desktop 3000 */
         MAKE_VIDPID(0x045e, 0x0745),
 
-        /* MicrosoftÂ® SideWinder(TM) 2.4GHz Transceiver */
+        /* Microsoft® SideWinder(TM) 2.4GHz Transceiver */
         MAKE_VIDPID(0x045e, 0x0748),
 
         /* Microsoft Corp. Wired Keyboard 600 */
@@ -1735,16 +1744,16 @@ SDL_bool SDL_ShouldIgnoreJoystick(const char *name, SDL_JoystickGUID guid)
         /* Microsoft Corp. Arc Touch Mouse Transceiver */
         MAKE_VIDPID(0x045e, 0x0773),
 
-        /* MicrosoftÂ® 2.4GHz Transceiver v9.0 */
-        /* MicrosoftÂ® Nano Transceiver v2.1 */
+        /* Microsoft® 2.4GHz Transceiver v9.0 */
+        /* Microsoft® Nano Transceiver v2.1 */
         /* Microsoft Sculpt Ergonomic Keyboard (5KV-00001) */
         MAKE_VIDPID(0x045e, 0x07a5),
 
-        /* MicrosoftÂ® Nano Transceiver v1.0 */
+        /* Microsoft® Nano Transceiver v1.0 */
         /* Microsoft Wireless Keyboard 800 */
         MAKE_VIDPID(0x045e, 0x07b2),
 
-        /* MicrosoftÂ® Nano Transceiver v2.0 */
+        /* Microsoft® Nano Transceiver v2.0 */
         MAKE_VIDPID(0x045e, 0x0800),
 
         MAKE_VIDPID(0x046d, 0xc30a),  /* Logitech, Inc. iTouch Composite keboard */

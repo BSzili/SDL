@@ -42,9 +42,15 @@ SDL_LookupString(const char *key)
 static char *SDL_GetErrorMsg(char *errstr, int maxlen);
 
 int
+#ifdef __MORPHOS__
+SDL_VSetError(const char *fmt, va_list ap)
+#else
 SDL_SetError(SDL_PRINTF_FORMAT_STRING const char *fmt, ...)
+#endif
 {
+#ifndef __MORPHOS__
     va_list ap;
+#endif
     SDL_error *error;
 
     /* Ignore call if invalid format pointer was passed */
@@ -55,7 +61,9 @@ SDL_SetError(SDL_PRINTF_FORMAT_STRING const char *fmt, ...)
     error->error = 1;
     SDL_strlcpy((char *) error->key, fmt, sizeof(error->key));
 
+#ifndef __MORPHOS__
     va_start(ap, fmt);
+#endif
     error->argc = 0;
     while (*fmt) {
         if (*fmt++ == '%') {
@@ -110,7 +118,9 @@ SDL_SetError(SDL_PRINTF_FORMAT_STRING const char *fmt, ...)
             }
         }
     }
+	#ifndef __MORPHOS__
     va_end(ap);
+	#endif
 
     if (SDL_LogGetPriority(SDL_LOG_CATEGORY_ERROR) <= SDL_LOG_PRIORITY_DEBUG) {
         /* If we are in debug mode, print out an error message
@@ -124,6 +134,19 @@ SDL_SetError(SDL_PRINTF_FORMAT_STRING const char *fmt, ...)
     }
     return -1;
 }
+
+#ifdef __MORPHOS__
+int
+SDL_SetError(SDL_PRINTF_FORMAT_STRING const char *fmt, ...) 
+{
+	int rc;
+	va_list ap;
+	va_start(ap, fmt);
+	rc = SDL_VSetError(fmt, ap);
+	va_end(ap);
+	return rc;
+}
+#endif
 
 /* Available for backwards compatibility */
 const char *

@@ -130,6 +130,8 @@ typedef enum
     SDL_SYSWM_WAYLAND,
     SDL_SYSWM_MIR,  /* no longer available, left for API/ABI compatibility. Remove in 2.1! */
     SDL_SYSWM_WINRT,
+	SDL_SYSWM_OS4,
+	SDL_SYSWM_AMIGA,
     SDL_SYSWM_ANDROID,
     SDL_SYSWM_VIVANTE,
     SDL_SYSWM_OS2,
@@ -279,7 +281,18 @@ struct SDL_SysWMinfo
             EGLSurface surface;
         } android;
 #endif
-
+#if defined(SDL_VIDEO_DRIVER_AMIGAOS4)
+        struct
+        {
+            struct Window *window;      /**< The AmigaOS 4 window */
+        } os4;
+#endif
+#if defined(SDL_VIDEO_DRIVER_AMIGA)
+        struct
+        {
+            struct Window *window;      /**< Intuition window */
+        } intui;
+#endif
 #if defined(SDL_VIDEO_DRIVER_VIVANTE)
         struct
         {
