@@ -1189,6 +1189,15 @@ GL_RunCommandQueue(SDL_Renderer * renderer, SDL_RenderCommand *cmd, void *vertic
     }
 
     data->drawstate.target = renderer->target;
+	#ifdef __MORPHOS__
+	//
+	// Capehill fix : https://www.amigans.net/modules/xforum/viewtopic.php?post_id=117622#forumpost117622
+	// Seems to work for MorphOS !
+	// a lot of games (ports) work now
+	// but BLEND MODE seem not working : not sur if GlBlendModeHack function work for MorphOS
+	//
+	data->glEnable(GL_TEXTURE_2D);
+	#endif
     if (!data->drawstate.target) {
         SDL_GL_GetDrawableSize(renderer->window, &data->drawstate.drawablew, &data->drawstate.drawableh);
     }
