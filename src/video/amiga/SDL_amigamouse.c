@@ -137,7 +137,7 @@ AMIGA_ShowCursor(SDL_Cursor * cursor)
 {
 	SDL_VideoDevice *video = SDL_GetVideoDevice();
 	SDL_VideoData *data = (SDL_VideoData *)video->driverdata;
-	D("[%s] 0x%08lx\n", __FUNCTION__, cursor);
+	//D("[%s] 0x%08lx\n", __FUNCTION__, cursor);
 
 	if (IS_SYSTEM_CURSOR(cursor))
 	{
@@ -184,12 +184,9 @@ AMIGA_WarpMouse(SDL_Window * window, int x, int y)
 	struct Window *win;
 	D("[%s]\n", __FUNCTION__);
 
-		BOOL warpHostPointer;
-	
+	BOOL warpHostPointer;
 	warpHostPointer = !SDL_GetRelativeMouseMode() && (window == SDL_GetMouseFocus());
-	
 	if (warpHostPointer) {
-	
 		if ((win = data->win))
 		{
 			struct MsgPort port;
@@ -308,7 +305,7 @@ AMIGA_InitMouse(_THIS)
 {
 	SDL_Mouse *mouse = SDL_GetMouse();
 	char buffer[16];
-	
+
 	mouse->CreateCursor = AMIGA_CreateCursor;
 	mouse->CreateSystemCursor = AMIGA_CreateSystemCursor;
 	mouse->ShowCursor = AMIGA_ShowCursor;
