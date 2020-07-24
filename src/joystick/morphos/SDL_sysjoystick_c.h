@@ -26,28 +26,4 @@
 #include <exec/types.h>
 #include "SDL_joystick.h"
 
-#define MAX_BUTTONS     16
-#define MAX_HATS        8
-#define MAX_STICKS      8
-#define MAX_RUMBLE	2
-
-struct joystick_hwdata
-{
-	APTR main_sensor; // Main HID sensor
-	APTR child_sensors; // List of specific sub-sensor entries
-	APTR button[MAX_BUTTONS]; // SensorType_HIDInput_Trigger
-	APTR hat[MAX_HATS]; // SensorType_HIDInput_Stick
-	APTR stick[MAX_STICKS]; // SensorType_HIDInput_Analog, SensorType_HIDInput_AnalogStick, SensorType_HIDInput_3DStick
-	APTR battery; 	// SensorType_HIDInput_Battery 
-	APTR rumble[MAX_RUMBLE]; // SensorType_HIDInput_Rumble
-
-	ULONG stickType[MAX_STICKS];
-	int numSticks;
-	int numRumbles;
-
-	// hot plug support
-	struct MsgPort *notifyPort;
-	APTR sensorsNotify;
-};
-
 #endif
