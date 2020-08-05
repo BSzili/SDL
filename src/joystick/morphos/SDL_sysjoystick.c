@@ -44,7 +44,7 @@
 
 static const SDL_JoystickGUID gamepadlibGUID = { { 3, 150, 102 } };
 static gmlibHandle *handle;
-static BOOL updateNeeded;
+static BOOL updateNeeded = TRUE;
 static BOOL hadJoysticks[gmlibSlotMax];
 
 struct joystick_hwdata { ULONG dummy; };
@@ -59,18 +59,7 @@ static int SDL_MorphOS_JoystickGetCount(void)
 	return count;
 }
 
-/* Function to scan the system for joysticks.
- * It should return 0, or -1 on an unrecoverable fatal error.
- */
-static int
-SDL_MorphOS_JoystickInit(void)
-{
-	handle = gmlibInitialize("SDL", 0);
-	return handle ? 0 : -1;
-}
-
-static void
-SDL_MorphOS_JoystickDetect(void)
+static void SDL_MorphOS_JoystickDetect(void)
 {
 	// this seems to be called on every frame *after* polling joystick states
 	// mark updateNeeded since we'll have to call the gmlib update on the next
@@ -105,9 +94,19 @@ SDL_MorphOS_JoystickDetect(void)
 	updateNeeded = TRUE;
 }
 
+/* Function to scan the system for joysticks.
+ * It should return 0, or -1 on an unrecoverable fatal error.
+ */
+static int SDL_MorphOS_JoystickInit(void)
+{
+	handle = gmlibInitialize("SDL", 0);
+	if (handle)
+		SDL_MorphOS_JoystickDetect();
+	return handle ? 0 : -1;
+}
+
 /* Function to get the device-dependent name of a joystick */
-static const char *
-SDL_MorphOS_JoystickGetDeviceName(int device_index)
+static const char *SDL_MorphOS_JoystickGetDeviceName(int device_index)
 {
 	static gmlibGamepad info;
 
@@ -120,8 +119,7 @@ SDL_MorphOS_JoystickGetDeviceName(int device_index)
 }
 
 /* Function to perform the mapping from device index to the instance id for this index */
-static
-SDL_JoystickID SDL_MorphOS_JoystickGetDeviceInstanceID(int device_index)
+static SDL_JoystickID SDL_MorphOS_JoystickGetDeviceInstanceID(int device_index)
 {
 	return device_index;
 }
@@ -131,8 +129,7 @@ SDL_JoystickID SDL_MorphOS_JoystickGetDeviceInstanceID(int device_index)
    This should fill the nbuttons and naxes fields of the joystick structure.
    It returns 0, or -1 if there is an error.
  */
-static int
-SDL_MorphOS_JoystickOpen(SDL_Joystick * joystick, int device_index)
+static int SDL_MorphOS_JoystickOpen(SDL_Joystick * joystick, int device_index)
 {
 	if (gmlibGetGamepad(handle, device_index + 1, NULL))
 	{
@@ -147,8 +144,7 @@ SDL_MorphOS_JoystickOpen(SDL_Joystick * joystick, int device_index)
 	return -1;
 }
 
-static void
-SDL_MorphOS_JoystickUpdate(SDL_Joystick * joystick)
+static void SDL_MorphOS_JoystickUpdate(SDL_Joystick * joystick)
 {
 	ULONG slot = (ULONG)joystick->hwdata;
 
@@ -200,6 +196,7 @@ SDL_MorphOS_JoystickUpdate(SDL_Joystick * joystick)
 		
 		SDL_JoystickPowerLevel ePowerLevel = SDL_JOYSTICK_POWER_UNKNOWN;
 		ULONG level = data._battery * 100;
+
 		switch (level)
 		{
 		case 1 ... 5:
@@ -227,24 +224,21 @@ SDL_MorphOS_JoystickUpdate(SDL_Joystick * joystick)
 }
 
 /* Function to close a joystick after use */
-void
-SDL_MorphOS_JoystickClose(SDL_Joystick * joystick)
+void SDL_MorphOS_JoystickClose(SDL_Joystick * joystick)
 {
 	D("[%s]\n", __FUNCTION__);
 	joystick->hwdata = NULL;
 }
 
 /* Function to perform any system-specific joystick related cleanup */
-static void
-SDL_MorphOS_JoystickQuit(void)
+static void SDL_MorphOS_JoystickQuit(void)
 {
 	D("[%s]\n", __FUNCTION__);
 	gmlibShutdown(handle);
 	handle = NULL;
 }
 
-static SDL_JoystickGUID
-SDL_MorphOS_JoystickGetDeviceGUID( int device_index )
+static SDL_JoystickGUID SDL_MorphOS_JoystickGetDeviceGUID( int device_index )
 {
 	return gamepadlibGUID;
 }
@@ -253,8 +247,7 @@ SDL_MorphOS_JoystickGetDeviceGUID( int device_index )
  Rumble experimental
  Add duration in function, impossible to stop rumble in progress, so SDL2 can't stop it
 */
-static int
-SDL_MorphOS_JoystickRumble(SDL_Joystick * joystick, Uint16 low_frequency_rumble, Uint16 high_frequency_rumble, Uint32 duration_ms)
+static int SDL_MorphOS_JoystickRumble(SDL_Joystick * joystick, Uint16 low_frequency_rumble, Uint16 high_frequency_rumble, Uint32 duration_ms)
 {
 	ULONG slot = (ULONG)joystick->hwdata;
 	DOUBLE lpower=(DOUBLE)(low_frequency_rumble/65535), hpower=(DOUBLE)(high_frequency_rumble/65535);
@@ -263,14 +256,12 @@ SDL_MorphOS_JoystickRumble(SDL_Joystick * joystick, Uint16 low_frequency_rumble,
     return 0;
 }
 
-static int
-SDL_MorphOS_JoystickGetDevicePlayerIndex(int device_index)
+static int SDL_MorphOS_JoystickGetDevicePlayerIndex(int device_index)
 {
     return device_index;
 }
 
-static void
-SDL_MorphOS_JoystickSetDevicePlayerIndex(int device_index, int player_index)
+static void SDL_MorphOS_JoystickSetDevicePlayerIndex(int device_index, int player_index)
 {
 }
 
