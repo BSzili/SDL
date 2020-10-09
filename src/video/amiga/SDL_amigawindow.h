@@ -1,6 +1,6 @@
 /*
   Simple DirectMedia Layer
-  Copyright (C) 1997-2014 Sam Lantinga <slouken@libsdl.org>
+  Copyright (C) 1997-2020 Sam Lantinga <slouken@libsdl.org>
 
   This software is provided 'as-is', without any express or implied
   warranty.  In no event will the authors be held liable for any damages
@@ -42,6 +42,7 @@ typedef struct
 
 	SDL_Window *window;
 	struct Window *win;
+	struct AppWindow *appmsg;
 
 	// Localized window title, use SDL_free() to deallocate
 	char *window_title;
