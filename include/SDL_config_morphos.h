@@ -140,7 +140,7 @@
 #define SDL_AUDIO_DRIVER_DUMMY 1
 
 /* Enable haptic drivers */
-#define SDL_HAPTIC_DISABLED		1
+#define SDL_HAPTIC_DUMMY 		1
 
 /* Enable SENSOR */
 #define SDL_SENSOR_DUMMY       1
