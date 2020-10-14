@@ -819,7 +819,7 @@ static const char *s_ControllerMappings [] =
     "53504545442d4c494e4b20436f6d7065,SPEED-LINK Competition Pro,platform:AmigaOS 4,a:b0,b:b1,x:b3,y:b2,leftx:a0,lefty:a1,",
 #endif
 #if defined(__MORPHOS__)
-	"030000004c050000c405000000000000,PlayStation 4 Dualshock Controller,platform:MorphOS,a:b6,b:b7,x:b4,y:b5,back:b3,start:b2,leftstick:b8,rightstick:b9,leftshoulder:b0,rightshoulder:b1,dpup:h0.1,dpdown:h0.4,dpleft:h0.8,dpright:h0.2,leftx:a0,lefty:a1,rightx:a2,righty:a3,lefttrigger:+a4,righttrigger:+a5,",
+	"03966600000000000000000000000000,X360 Compatible Gamepad,a:b10,b:b11,x:b8,y:b9,back:b4,start:b5,leftstick:b6,rightstick:b7,leftshoulder:b12,rightshoulder:b13,dpup:b2,dpdown:b3,dpleft:b0,dpright:b1,leftx:a0,lefty:a1,rightx:a2,righty:a3,lefttrigger:+a4,righttrigger:+a5,",
 #endif  
     "hidapi,*,a:b0,b:b1,back:b4,dpdown:b12,dpleft:b13,dpright:b14,dpup:b11,guide:b5,leftshoulder:b9,leftstick:b7,lefttrigger:a4,leftx:a0,lefty:a1,rightshoulder:b10,rightstick:b8,righttrigger:a5,rightx:a2,righty:a3,start:b6,x:b2,y:b3,",
     NULL
