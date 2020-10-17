@@ -2,7 +2,7 @@
 #
 # Enable debug with -D__SDL_DEBUG
 
-CDEFS   = -DAROS_ALMOST_COMPATIBLE -DBUILD_SDL2_LIBRARY -D__SDL_DEBUG
+CDEFS   = -DAROS_ALMOST_COMPATIBLE -DBUILD_SDL2_LIBRARY
 #CC      = ppc-morphos-gcc-4 -noixemul -cstd=c99
 CC      = ppc-morphos-gcc-9 -noixemul
 INCLUDE = -I./include
