@@ -72,7 +72,11 @@ SDL_DUMMY_SensorGetDeviceInstanceID(int device_index)
 static int
 SDL_DUMMY_SensorOpen(SDL_Sensor *sensor, int device_index)
 {
+	#ifdef __MORPHOS__
+	return -1;
+	#else
     return SDL_Unsupported();
+	#endif
 }
     
 static void

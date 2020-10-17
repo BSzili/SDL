@@ -140,12 +140,15 @@
 #define SDL_AUDIO_DRIVER_DUMMY 1
 
 /* Enable haptic drivers */
-#define SDL_HAPTIC_DUMMY       1
+#define SDL_HAPTIC_DUMMY 		1
+
+/* Enable SENSOR */
+#define SDL_SENSOR_DUMMY       1
 
 /* Enable AMIGA (lowlevel.library) JOYSTICK/GAMEPAD */
-#define SDL_JOYSTICK_AMIGA     1
+//#define SDL_JOYSTICK_AMIGA     1
 /* Enable MORPHOS SENSORS JOYSTICK/GAMEPAD */
-//#define SDL_JOYSTICK_MORPHOS   1  
+#define SDL_JOYSTICK_MORPHOS   1  
 
 /* Enable various shared object loading systems */
 #define SDL_LOADSO_DLOPEN   1
@@ -170,7 +173,7 @@
 
 /* Maybe later */
 #ifndef SDL_VIDEO_RENDER_OGL
-//#define SDL_VIDEO_RENDER_OGL    1
+#define SDL_VIDEO_RENDER_OGL    1
 #endif
 
 /* Enable OpenGL support */

@@ -3,7 +3,7 @@
 
 /*
   Simple DirectMedia Layer
-  Copyright (C) 1997-2016 Sam Lantinga <slouken@libsdl.org>
+  Copyright (C) 1997-2020 Sam Lantinga <slouken@libsdl.org>
 
   This software is provided 'as-is', without any express or implied
   warranty.  In no event will the authors be held liable for any damages
@@ -723,8 +723,8 @@ int SDL_LockTextureToSurface(SDL_Texture *texture, const SDL_Rect *rect, SDL_Sur
 wchar_t *SDL_wcsstr(const wchar_t *haystack, const wchar_t *needle);
 int SDL_wcsncmp(const wchar_t *str1, const wchar_t *str2, size_t maxlen);
 char *SDL_strtokr(char *s1, const char *s2, char **saveptr);
-int SDLCALL SDL_isupper(int x);
-int SDLCALL SDL_islower(int x);
+int SDL_isupper(int x);
+int SDL_islower(int x);
 
 
 #endif

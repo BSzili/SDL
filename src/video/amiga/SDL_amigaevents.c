@@ -1,6 +1,6 @@
 /*
   Simple DirectMedia Layer
-  Copyright (C) 1997-2014 Sam Lantinga <slouken@libsdl.org>
+  Copyright (C) 1997-2020 Sam Lantinga <slouken@libsdl.org>
 
   This software is provided 'as-is', without any express or implied
   warranty.  In no event will the authors be held liable for any damages
@@ -40,7 +40,9 @@
 #include <rexx/errors.h>
 #include <rexx/storage.h>
 #include <workbench/workbench.h>
+#include <workbench/startup.h>
 
+#include <proto/dos.h>
 #include <proto/alib.h>
 #include <proto/commodities.h>
 #include <proto/exec.h>
@@ -52,20 +54,20 @@
 static void
 AMIGA_DispatchMouseButtons(const struct IntuiMessage *m, const SDL_WindowData *data)
 {
-	int i = 1, state = SDL_PRESSED;
+	int state = (m->Code & IECODE_UP_PREFIX) ? SDL_RELEASED : SDL_PRESSED;
 
-	switch (m->Code)
+	switch (m->Code & ~(IECODE_UP_PREFIX))
 	{
-		case SELECTUP  : i = 1; state = SDL_RELEASED; break;
-		case SELECTDOWN: i = 1; break;
-		case MENUUP    : i = 2; state = SDL_RELEASED; break;
-		case MENUDOWN  : i = 2; break;
-		case MIDDLEUP  : i = 3; state = SDL_RELEASED; break;
-		case MIDDLEDOWN: i = 3; break;
-		default        : return;
+		case IECODE_LBUTTON:
+			SDL_SendMouseButton(data->window, 0, state, SDL_BUTTON_LEFT);
+			break;
+		case IECODE_RBUTTON:
+			SDL_SendMouseButton(data->window, 0, state, SDL_BUTTON_RIGHT);
+			break;
+		case IECODE_MBUTTON:
+			SDL_SendMouseButton(data->window, 0, state, SDL_BUTTON_MIDDLE);
+			break;
 	}
-
-	SDL_SendMouseButton(data->window, 0, state, i);
 }
 
 static int
@@ -119,11 +121,11 @@ AMIGA_DispatchRawKey(struct IntuiMessage *m, const SDL_WindowData *data)
 			break;
 
 		case RAWKEY_NM_BUTTON_FOURTH:
-			SDL_SendMouseButton(data->window, 0, SDL_PRESSED, 4);
+			SDL_SendMouseButton(data->window, 0, SDL_PRESSED, SDL_BUTTON_X1);
 			break;
 
 		case RAWKEY_NM_BUTTON_FOURTH | IECODE_UP_PREFIX:
-			SDL_SendMouseButton(data->window, 0, SDL_RELEASED, 4);
+			SDL_SendMouseButton(data->window, 0, SDL_RELEASED, SDL_BUTTON_X1);
 			break;
 
 		default:
@@ -352,15 +354,37 @@ AMIGA_CheckWBEvents(_THIS)
 {
 	SDL_VideoData *data = (SDL_VideoData *) _this->driverdata;
 	struct AppMessage *msg;
-
+	char filename[1024];
 	while ((msg = (struct AppMessage *)GetMsg(&data->WBPort)) != NULL)
 	{
 		D("[%s] check AppMessage\n", __FUNCTION__);
-
-		if (msg->am_NumArgs == 0 && msg->am_ArgList == NULL)
-			AMIGA_ShowApp(_this);
-
-#warning object dragn drop
+	
+		switch (msg->am_Type) {	
+			case AMTYPE_APPWINDOW:
+				{
+				    SDL_Window *window = (SDL_Window *)msg->am_UserData;
+					struct WBArg *argptr = msg->am_ArgList;
+				    for (int i = 0; i < msg->am_NumArgs; i++) {
+						if (argptr->wa_Lock) {
+							NameFromLock(argptr->wa_Lock, filename, 1024);
+							AddPart(filename, argptr->wa_Name, 1024);
+						
+							D("[%s] SDL_SendDropfile : '%s'\n", __FUNCTION__, filename);
+							SDL_SendDropFile(window, filename);
+							argptr++;
+						}
+					}
+					SDL_SendDropComplete(window);
+				}
+				break;			
+			case AMTYPE_APPICON:
+				AMIGA_ShowApp(_this);
+				break;
+			default:
+				//D("[%s] Unknown AppMsg %d %p\n", __FUNCTION__, msg->am_Type, (APTR)msg->am_UserData);
+				break;
+		}
+		
 	}
 }
 

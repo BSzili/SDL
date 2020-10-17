@@ -1,6 +1,6 @@
 /*
   Simple DirectMedia Layer
-  Copyright (C) 1997-2014 Sam Lantinga <slouken@libsdl.org>
+  Copyright (C) 1997-2020 Sam Lantinga <slouken@libsdl.org>
 
   This software is provided 'as-is', without any express or implied
   warranty.  In no event will the authors be held liable for any damages
@@ -150,7 +150,8 @@ AMIGA_VideoInit(_THIS)
 	AMIGA_InitMouse(_this);
 
 	SDL_SetHint(SDL_HINT_VIDEO_MINIMIZE_ON_FOCUS_LOSS, "0");
-		
+	SDL_SetHint(SDL_HINT_GAMECONTROLLERCONFIG_FILE, "ENV:gamecontrollerdb.txt");
+	
 	return 0;
 }
 
