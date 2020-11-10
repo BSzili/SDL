@@ -27,22 +27,46 @@
 
 #include <exec/execbase.h>
 #include <proto/exec.h>
+#include <proto/dos.h>
 #include <proto/threadpool.h>
 
 extern APTR threadpool;
 
-#if 0
+typedef struct
+{
+    int (SDLCALL * func) (void *);
+    void *data;
+    SDL_Thread *info;
+    SDL_sem *wait;
+} thread_args;
+
 static void
 RunThread(APTR data, struct MsgPort *port)
 {
+
+	thread_args *args = (thread_args *)data;
+	SDL_Thread *thread = args->info;
+	
+	BPTR lock = thread->status;
+	thread->status = 0;
+	//char buff[PATH_MAX];
+	//NameFromLock(lock, buff, PATH_MAX);
+	//D("[%s] thread->status=%s\n", __FUNCTION__, buff);
+	
+	BPTR oldDir = CurrentDir(lock);
 	SDL_RunThread(data);
+	UnLock(CurrentDir(oldDir));
 }
-#endif
 
 int
 SDL_SYS_CreateThread(SDL_Thread * thread, void *args)
 {
-	thread->handle = QueueWorkItem(threadpool, (APTR)SDL_RunThread, args);
+	thread->status = Lock("", SHARED_LOCK);
+	//char buff[PATH_MAX];
+	//NameFromLock(thread->status, buff, PATH_MAX);
+	//D("[%s] thread->status=%s\n", __FUNCTION__, buff);
+	
+	thread->handle = QueueWorkItem(threadpool, (APTR)/*SDL_RunThread*/RunThread, args);
 	return thread->handle == WORKITEM_INVALID ? -1 : 0;
 }
 
